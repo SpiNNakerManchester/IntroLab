@@ -7,44 +7,13 @@
 
 import pyNN.spiNNaker as p
 from pyNN.random import RandomDistribution
-import spynnaker_external_devices_plugin.pyNN as ext
-import subprocess
-from threading import Thread
-import os
-import sys
+import pylab
+import numpy
 
 run_time = 20000                        # run time in milliseconds
 neurons_per_digit = 5                   # number of neurons per digit
 fact = float(neurons_per_digit) / 10.0  # number of neurons per digit / 10
 ms_per_bin = 100
-
-
-# Run the visualiser
-def read_output(visualiser, out):
-    while visualiser.poll() is None:
-        line = out.readline()
-        if line:
-            print line
-    print "Visualiser exited - quitting"
-    os._exit(0)
-
-vis_exe = None
-if sys.platform.startswith("win32"):
-    vis_exe = "sudoku.exe"
-elif sys.platform.startswith("darwin"):
-    vis_exe = "sudoku_osx"
-elif sys.platform.startswith("linux"):
-    vis_exe = "sudoku_linux"
-else:
-    raise Exception("Unknown platform: {}".format(sys.platform))
-vis_exe = os.path.abspath(os.path.join(os.path.dirname(__file__), vis_exe))
-print "Executing", vis_exe
-visualiser = subprocess.Popen(args=[
-    vis_exe,
-    "-neurons_per_number", str(neurons_per_digit),
-    "-ms_per_bin", str(ms_per_bin)],
-    stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1)
-Thread(target=read_output, args=[visualiser, visualiser.stdout]).start()
 
 p.setup(timestep=1.0)
 print "Creating Sudoku Network..."
@@ -57,11 +26,12 @@ n_total = n_cell * 9 * 9
 n_stim_total = n_stim * 9 * 9
 
 # global distributions & parameters
-weight_cell = 0.2
+weight_cell = 0.5
 weight_stim = 0.2
 dur_nois = RandomDistribution("uniform", [30000.0, 30001.0])
-weight_nois = 1.4
+weight_nois = 2.0
 delay = 2.0
+rate_nois = 50.0
 
 
 # Diabolical problem:
@@ -95,7 +65,7 @@ corr = init
 #
 cell_params_lif = {
     'cm': 0.25,         # nF membrane capacitance
-    'i_offset': 0.5,    # nA    bias current
+    'i_offset': 0.0,    # nA    bias current
     'tau_m': 20.0,      # ms    membrane time constant
     'tau_refrac': 2.0,  # ms    refractory period
     'tau_syn_E': 5.0,   # ms    excitatory synapse time constant
@@ -103,13 +73,11 @@ cell_params_lif = {
     'v_reset': -70.0,   # mV    reset membrane potential
     'v_rest': -65.0,    # mV    rest membrane potential
     'v_thresh': -50.0,  # mV    firing threshold voltage
-    'spikes_per_second': 200
 }
 
 print "Creating Populations..."
 cells = p.Population(n_total, p.IF_curr_exp, cell_params_lif, label="Cells")
 cells.record()
-ext.activate_live_output_for(cells, tag=1, port=17897)
 
 #
 # add a noise source to each cell
@@ -117,7 +85,7 @@ ext.activate_live_output_for(cells, tag=1, port=17897)
 print "Creating Noise Sources..."
 noise = p.Population(
     n_total, p.SpikeSourcePoisson,
-    {"rate": 20.0},
+    {"rate": rate_nois},
     label="Noise")
 p.Projection(noise, cells, p.OneToOneConnector(weight_nois))
 
@@ -206,20 +174,20 @@ cells.initialize("v", RandomDistribution("uniform", [-65.0, -55.0]))
 
 p.run(run_time)
 
-# spikes = cells.getSpikes()
-# f, axarr = pylab.subplots(9, 9)
-# for y in range(9):
-#     for x in range(9):
-#         base = ((y * 9) + x) * n_cell
-#         next_base = base + n_cell
-#         ids = spikes[:, 0]
-#         cell_spikes = spikes[numpy.where((ids >= base) & (ids < next_base))]
-#         axarr[8 - y][x].plot(
-#             [i[1] for i in cell_spikes],
-#             [i[0] - base for i in cell_spikes], ".")
-#         axarr[8 - y][x].axis([0, run_time, -1, n_cell + 1])
-#         # axarr[8 - y][x].axis('off')
+spikes = cells.getSpikes()
+f, axarr = pylab.subplots(9, 9)
+for y in range(9):
+    for x in range(9):
+        base = ((y * 9) + x) * n_cell
+        next_base = base + n_cell
+        ids = spikes[:, 0]
+        cell_spikes = spikes[numpy.where((ids >= base) & (ids < next_base))]
+        axarr[8 - y][x].plot(
+            [i[1] for i in cell_spikes],
+            [i[0] - base for i in cell_spikes], ".")
+        axarr[8 - y][x].axis([0, run_time, -1, n_cell + 1])
+        # axarr[8 - y][x].axis('off')
 # pylab.show()
-# pylab.savefig("sudoku.png")
+pylab.savefig("sudoku.png")
 
 p.end()
