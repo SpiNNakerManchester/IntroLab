@@ -182,7 +182,7 @@ post_pop.record()
 # Run simulation
 sim.run(simtime)
 
-weights =  plastic_projection.getWeights()
+weights = plastic_projection.getWeights()
 pre_spikes = pre_pop.getSpikes(compatible_output=True)
 post_spikes = post_pop.getSpikes(compatible_output=True)
 
@@ -193,8 +193,10 @@ if __name__ == '__main__':
         import pylab
         pylab.figure()
         pylab.xlim((0, simtime))
-        pylab.plot([i[1] for i in pre_spikes], [i[0] for i in pre_spikes], "r.")
-        pylab.plot([i[1] for i in post_spikes], [i[0] for i in post_spikes], "b.")
+        pylab.plot([i[1] for i in pre_spikes], [i[0] for i in pre_spikes],
+                   "r.")
+        pylab.plot([i[1] for i in post_spikes], [i[0] for i in post_spikes],
+                   "b.")
         pylab.xlabel('Time/ms')
         pylab.ylabel('spikes')
         pylab.show()
