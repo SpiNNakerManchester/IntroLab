@@ -8,7 +8,7 @@ from spinnman.messages.sdp.sdp_message import SDPMessage
 from spinnman.messages.sdp.sdp_header import SDPHeader
 from spinnman.messages.sdp.sdp_flag import SDPFlag
 from pacman.model.constraints.placer_constraints\
-    .placer_chip_and_core_constraint import PlacerChipAndCoreConstraint
+    .chip_and_core_constraint import ChipAndCoreConstraint
 from spinn_front_end_common.utilities.utility_objs.executable_start_type \
     import ExecutableStartType
 from spinn_front_end_common.abstract_models.abstract_has_associated_binary \
@@ -39,7 +39,7 @@ class Aggregator(MachineVertex, AbstractHasAssociatedBinary):
     def __init__(self):
         MachineVertex.__init__(
             self, label="Aggregator",
-            constraints=[PlacerChipAndCoreConstraint(0, 0, 1)])
+            constraints=[ChipAndCoreConstraint(0, 0, 1)])
 
     @overrides(AbstractHasAssociatedBinary.get_binary_file_name)
     def get_binary_file_name(self):
