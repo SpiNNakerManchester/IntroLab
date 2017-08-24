@@ -28,11 +28,11 @@ Authors : Catherine Wacongne < catherine.waco@gmail.com >
 
 April 2013
 """
-import pylab
+
 try:
     import pyNN.spiNNaker as sim
 except Exception as e:
-    import spynnaker.pyNN as sim
+    import spynnaker7.pyNN as sim
 
 # SpiNNaker setup
 sim.setup(timestep=1.0, min_delay=1.0, max_delay=10.0)
@@ -182,19 +182,28 @@ post_pop.record()
 # Run simulation
 sim.run(simtime)
 
-print("Weights:", plastic_projection.getWeights())
-
+weights = plastic_projection.getWeights()
 pre_spikes = pre_pop.getSpikes(compatible_output=True)
 post_spikes = post_pop.getSpikes(compatible_output=True)
 
-pylab.figure()
-pylab.xlim((0, simtime))
-pylab.plot([i[1] for i in pre_spikes], [i[0] for i in pre_spikes], "r.")
-pylab.plot([i[1] for i in post_spikes], [i[0] for i in post_spikes], "b.")
-pylab.xlabel('Time/ms')
-pylab.ylabel('spikes')
-
-pylab.show()
+if __name__ == '__main__':
+    print("Weights:", weights)
+    try:
+        # Plot if possible
+        import pylab
+        pylab.figure()
+        pylab.xlim((0, simtime))
+        pylab.plot([i[1] for i in pre_spikes], [i[0] for i in pre_spikes],
+                   "r.")
+        pylab.plot([i[1] for i in post_spikes], [i[0] for i in post_spikes],
+                   "b.")
+        pylab.xlabel('Time/ms')
+        pylab.ylabel('spikes')
+        pylab.show()
+    except Exception as ex:
+        print ex
+        print pre_spikes
+        print post_spikes
 
 # End simulation on SpiNNaker
 sim.end()

@@ -7,7 +7,8 @@ from pacman.model.resources.sdram_resource import SDRAMResource
 from spinnman.messages.sdp.sdp_message import SDPMessage
 from spinnman.messages.sdp.sdp_header import SDPHeader
 from spinnman.messages.sdp.sdp_flag import SDPFlag
-from pacman.model.constraints.placer_constraints import ChipAndCoreConstraint
+from pacman.model.constraints.placer_constraints\
+    .chip_and_core_constraint import ChipAndCoreConstraint
 from spinn_front_end_common.utilities.utility_objs.executable_start_type \
     import ExecutableStartType
 from spinn_front_end_common.abstract_models.abstract_has_associated_binary \
