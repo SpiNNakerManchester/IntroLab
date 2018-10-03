@@ -1,5 +1,4 @@
 sPyNNaker8 >= 1!4.0.0, < 1!5.0.0
 pyNN  >= 0.8, <= 0.9
-pylab
 numpy  >= 1.12, < 1.9999
 matplotlib
