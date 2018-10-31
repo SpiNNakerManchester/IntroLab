@@ -94,7 +94,7 @@ def sudoku_run(puzzle):
     # global distributions & parameters
     weight_cell = 0.2  # 0.15
     weight_stim = 1
-    dur_nois = RandomDistribution("uniform", [30000.0, 30001.0])
+    # dur_nois = RandomDistribution("uniform", [30000.0, 30001.0])
     weight_nois = 1.4
     delay = 2.0
     # puzzle = 6
@@ -193,7 +193,7 @@ def sudoku_run(puzzle):
 
     # Dream problem - no input!
     # init = [[0 for x in range(9)] for y in range(9)]
-    corr = init
+    # corr = init
 
     p.set_number_of_neurons_per_core(p.IF_curr_exp, 200)
 
@@ -213,7 +213,8 @@ def sudoku_run(puzzle):
     }
 
     print("Creating Populations...")
-    cells = p.Population(n_total, p.IF_curr_exp, cell_params_lif, label="Cells",
+    cells = p.Population(n_total, p.IF_curr_exp,
+                         cell_params_lif, label="Cells",
                          additional_parameters={"spikes_per_second": 200})
     cells.record("spikes")
     ext.activate_live_output_for(cells, tag=1, port=17897)
@@ -228,7 +229,6 @@ def sudoku_run(puzzle):
         label="Noise")
     p.Projection(noise, cells, p.OneToOneConnector(),
                  synapse_type=p.StaticSynapse(weight=weight_nois))
-
 
     #
     # set up the cell internal inhibitory connections
@@ -248,10 +248,10 @@ def sudoku_run(puzzle):
             ]
             connections.extend(connections_cell)
 
-
     #
     # set up the inter-cell inhibitory connections
     #
+
     def interCell(x, y, r, c, connections):
         """ Inhibit same number: connections are n_N squares on diagonal of
             weight_cell() from cell[x][y] to cell[r][c]
@@ -264,7 +264,6 @@ def sudoku_run(puzzle):
             for j in range(n_N * (i // n_N), n_N * (i // n_N + 1))]
 
         connections.extend(connections_intC)
-
 
     print("Setting up inhibition between cells...")
     for x in range(9):
@@ -313,7 +312,7 @@ def sudoku_run(puzzle):
     # initialise the network, run, and get results
     cells.initialize(v=RandomDistribution("uniform", [-65.0, -55.0]))
 
-    running = True
+#    running = True
     p.run(run_time)
 
     # spikes = cells.getSpikes()
@@ -323,7 +322,8 @@ def sudoku_run(puzzle):
     #         base = ((y * 9) + x) * n_cell
     #         next_base = base + n_cell
     #         ids = spikes[:, 0]
-    #         cell_spikes = spikes[numpy.where((ids >= base) & (ids < next_base))]
+    #         cell_spikes = spikes[
+    #            numpy.where((ids >= base) & (ids < next_base))]
     #         axarr[8 - y][x].plot(
     #             [i[1] for i in cell_spikes],
     #             [i[0] - base for i in cell_spikes], ".")
@@ -333,7 +333,7 @@ def sudoku_run(puzzle):
     # pylab.savefig("sudoku.png")
 
     p.end()
-    ended = True
+#    ended = True
 
     return proc
 
