@@ -11,6 +11,7 @@ import subprocess
 import os
 import sys
 import traceback
+import time
 
 run_time = 20000                        # run time in milliseconds
 neurons_per_digit = 5                   # number of neurons per digit
@@ -341,4 +342,5 @@ def sudoku_run(puzzle):
 for puz in range(7):
     print("Running puzzle ", puz)
     proc = sudoku_run(puz)
+    time.sleep(15)
     proc.kill()
