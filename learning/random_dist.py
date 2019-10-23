@@ -1,4 +1,4 @@
-import spynnaker8 as sim
+import spynnaker as sim
 import pyNN.utility.plotting as plot
 import matplotlib.pyplot as plt
 from pyNN.random import RandomDistribution

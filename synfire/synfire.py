@@ -2,8 +2,8 @@
 Synfire chain example
 """
 import matplotlib.pyplot as plt
-import spynnaker8 as sim
-from spynnaker8.utilities import neo_convertor
+import spynnaker as sim
+from spynnaker.pyNN.utilities import neo_convertor
 
 # number of neurons in each population
 n_neurons = 100
@@ -40,12 +40,12 @@ sim.run(simtime)
 # spikes = [pop.spinnaker_get_data("spikes") for pop in chain_pops]
 
 # Pynn method and support method
-neos = [pop.get_data("spikes") for pop in chain_pops]
-spikes = map(neo_convertor.convert_spikes, neos)
+#neos = [pop.get_data("spikes") for pop in chain_pops]
+#spikes = map(neo_convertor.convert_spikes, neos)
 
 sim.end()
 
-
+""""
 try:
     plt.figure()
     plt.xlabel('Time (ms)')
@@ -91,3 +91,4 @@ except Exception as ex:
     #     for neo in neos:
     #         print(neo.segments[0].spiketrains)
     #         print("====")
+"""
