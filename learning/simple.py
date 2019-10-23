@@ -9,7 +9,7 @@ pop_1 = sim.Population(1, sim.IF_curr_exp(tau_syn_E=5), label="pop_1")
 input = sim.Population(1, sim.SpikeSourceArray(spike_times=[0]), label="input")
 input_proj = sim.Projection(input, pop_1, sim.OneToOneConnector(),
                             synapse_type=sim.StaticSynapse(weight=5, delay=1))
-pop_1.record(["spikes", "v"],sampling_interval=1)
+pop_1.record(["spikes", "v"])
 simtime = 20
 sim.run(simtime)
 

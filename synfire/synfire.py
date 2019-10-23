@@ -40,12 +40,11 @@ sim.run(simtime)
 # spikes = [pop.spinnaker_get_data("spikes") for pop in chain_pops]
 
 # Pynn method and support method
-#neos = [pop.get_data("spikes") for pop in chain_pops]
-#spikes = map(neo_convertor.convert_spikes, neos)
+neos = [pop.get_data("spikes") for pop in chain_pops]
+spikes = map(neo_convertor.convert_spikes, neos)
 
 sim.end()
 
-""""
 try:
     plt.figure()
     plt.xlabel('Time (ms)')
@@ -91,4 +90,3 @@ except Exception as ex:
     #     for neo in neos:
     #         print(neo.segments[0].spiketrains)
     #         print("====")
-"""
