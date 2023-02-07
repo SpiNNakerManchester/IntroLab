@@ -74,3 +74,5 @@ jobs:
         path: support
     - name: Run rat copyright enforcement
       uses: ./support/actions/check-copyrights
+      with:
+        allow_gpl: false
