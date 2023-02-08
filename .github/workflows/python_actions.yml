@@ -75,4 +75,4 @@ jobs:
     - name: Run rat copyright enforcement
       uses: ./support/actions/check-copyrights
       with:
-        config_file: rat_asl20.xml
+        config_file: rat_gpl3.xml
