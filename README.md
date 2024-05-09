@@ -1,1 +1,1 @@
-This Code has been moved to [Python Build Status](https://github.com/SpiNNakerManchester/PyNNExamples)
+This Code has been moved to [PyNNExamples](https://github.com/SpiNNakerManchester/PyNNExamples)
